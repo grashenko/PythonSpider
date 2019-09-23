@@ -10,11 +10,18 @@ class MyItem(Item):
     countOfWords = Field()
     countOfLinks = Field()
     frequencyOfLength = Field()
+    frequencyOfWords = Field()
 
 
-class MyDictionary(Item):
+
+class LengthDictionary(Item):
     countLetters = Field()
     countWords = Field()
+
+    
+class WordsDictionary(Item):
+    word = Field()
+    count = Field()
 
 
 class PycoderSpider(CrawlSpider):
@@ -41,17 +48,31 @@ class PycoderSpider(CrawlSpider):
         item['countOfWords'] = len(words)
 
         frequency = []
+        frequencyWords = []
+
 
         for w in words:
             l = len(w)
             finded = next((x for x in frequency if x['countLetters'] == l), None)
+
             if finded:
                 finded['countWords'] = finded['countWords'] + 1
             else:
-                newLength = MyDictionary()
+                newLength = LengthDictionary()
                 newLength['countLetters'] = l
                 newLength['countWords'] = 1
                 frequency.append(newLength)
+            
+            findedWord = next((t for t in frequencyWords if t['word'] == w), None)
+            if findedWord:
+                findedWord['count'] = findedWord['count'] + 1
+            else:
+                newWord = WordsDictionary()
+                newWord['word'] = w
+                newWord['count'] = 1
+                frequencyWords.append(newWord)    
         
         item['frequencyOfLength'] = frequency
+        item['frequencyOfWords'] = frequencyWords
+
         return item
