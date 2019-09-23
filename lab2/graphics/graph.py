@@ -23,11 +23,15 @@ sns.set_style("white")
 print(mpl.__version__)  #> 3.0.0
 print(sns.__version__)  #> 0.9.0
 
-df_raw = pd.read_json(r"F:\GitHub\PythonSpider\lab2\out.json")
+df_raw = pd.read_json(r"lab2\out.json")
+
 frequencyOfLength = df_raw['frequencyOfLength']
-firstSite = frequencyOfLength[0]
-df = pd.DataFrame(firstSite)
-df.sort_values('countWords', inplace=True)
+frequencyOfWords = df_raw['frequencyOfWords']
+
+
+firstSiteLength = frequencyOfLength[0]
+df = pd.DataFrame(firstSiteLength)
+df.sort_values('countLetters', inplace=True)
 df.reset_index(inplace=True)
 
 # Draw plot
@@ -43,8 +47,38 @@ for i, cty in enumerate(df.countWords):
 
 # Title, Label, Ticks and Ylim
 ax.set_title('Count letters', fontdict={'size':22})
-ax.set(ylabel='Count words with this letters count', ylim=(0, 30))
+ax.set(ylabel='Count words with this letters count', ylim=(0, 500))
 plt.xticks(df.index, df.countLetters, rotation=60, horizontalalignment='right', fontsize=12)
+
+# Add patches to color the X axis labels
+p1 = patches.Rectangle((.57, -0.005), width=.33, height=.13, alpha=.1, facecolor='green', transform=fig.transFigure)
+p2 = patches.Rectangle((.124, -0.005), width=.446, height=.13, alpha=.1, facecolor='red', transform=fig.transFigure)
+fig.add_artist(p1)
+fig.add_artist(p2)
+plt.show(block = False)
+
+firstSiteWords = frequencyOfWords[0]
+
+df = pd.DataFrame(firstSiteWords)
+df.sort_values('count', inplace=True)
+df = df.tail(10)
+df.reset_index(inplace=True)
+
+# Draw plot
+import matplotlib.patches as patches
+
+fig, ax = plt.subplots(figsize=(16,10), facecolor='white', dpi= 80)
+ax.vlines(x=df.index, ymin=0, ymax=df['count'], color='firebrick', alpha=0.7, linewidth=20)
+
+# Annotate Text
+for i, cty in enumerate(df['count']):
+    ax.text(i, cty+0.5, round(cty, 1), horizontalalignment='center')
+
+
+# Title, Label, Ticks and Ylim
+ax.set_title('Words', fontdict={'size':22})
+ax.set(ylabel='Count', ylim=(0, 100))
+plt.xticks(df.index, df.word, rotation=60, horizontalalignment='right', fontsize=12)
 
 # Add patches to color the X axis labels
 p1 = patches.Rectangle((.57, -0.005), width=.33, height=.13, alpha=.1, facecolor='green', transform=fig.transFigure)

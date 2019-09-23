@@ -11,6 +11,7 @@ class MyItem(Item):
     countOfLinks = Field()
     frequencyOfLength = Field()
     frequencyOfWords = Field()
+    links = Field()
 
 
 
@@ -34,7 +35,8 @@ class PycoderSpider(CrawlSpider):
     def parse_url(self, response):
         item = MyItem()
         item['url'] = response.url
-        links = response.xpath("//a[@href]").extract()
+        links = response.xpath("//a[@href]/@href").extract()
+        item['links'] = links
         item['countOfLinks'] = len(links)
         texts = response.xpath('//text()').extract()
         words = []
