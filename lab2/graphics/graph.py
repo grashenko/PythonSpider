@@ -85,4 +85,22 @@ p1 = patches.Rectangle((.57, -0.005), width=.33, height=.13, alpha=.1, facecolor
 p2 = patches.Rectangle((.124, -0.005), width=.446, height=.13, alpha=.1, facecolor='red', transform=fig.transFigure)
 fig.add_artist(p1)
 fig.add_artist(p2)
+plt.show(block = False)
+
+
+links = df_raw['links']
+
+fig, ax = plt.subplots()
+
+# hide axes
+fig.patch.set_visible(False)
+ax.axis('off')
+ax.axis('tight')
+
+df = pd.DataFrame(links[0])
+
+ax.table(cellText=df.values, colLabels=df.columns, loc='center')
+
+fig.tight_layout()
+
 plt.show()
